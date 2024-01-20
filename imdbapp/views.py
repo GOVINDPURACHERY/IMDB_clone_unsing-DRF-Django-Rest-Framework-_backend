@@ -9,11 +9,12 @@ from rest_framework import mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
-from imdbapp.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+from imdbapp.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 # Create your views here.
 
 
 class WatchListAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self,request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -28,6 +29,7 @@ class WatchListAV(APIView):
             return Response(serializer.errors)
 
 class WatchDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request, pk):
         try:
             movie = WatchList.objects.get(pk = pk)
@@ -51,6 +53,7 @@ class WatchDetailAV(APIView):
 
 
 class StreamPlatformAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, requet):
         stream_platform = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(stream_platform, many=True)
@@ -65,6 +68,7 @@ class StreamPlatformAV(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StreamPlatformDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, requet, pk):
         try:
             stream_platform = StreamPlatform.objects.get(pk=pk)
@@ -111,7 +115,7 @@ class StreamPlatformDetailAV(APIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated] #only registerd/logged in user can see details
 
 
     def get_queryset(self):
@@ -121,7 +125,7 @@ class ReviewList(generics.ListAPIView):
 class ReviewCreate(generics.CreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated] #only registerd/logged in user can create reviews
 
     def perform_create(self, serializer):
         pk = self.kwargs['pk']
@@ -148,7 +152,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [ReviewUserOrReadOnly]
+    permission_classes = [IsReviewUserOrReadOnly] #custom permission
 
     
 

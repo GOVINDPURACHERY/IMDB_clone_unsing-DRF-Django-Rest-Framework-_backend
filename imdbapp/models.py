@@ -29,10 +29,10 @@ class Review(models.Model):
     review_user = models.ForeignKey(User, on_delete = models.CASCADE)
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     description = models.CharField(max_length = 250, null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True) #field remains constant
+    update = models.DateTimeField(auto_now=True) #field value changes in each update
     active = models.BooleanField(default=True)
     watchlist = models.ForeignKey(WatchList, on_delete=models.CASCADE, related_name="reviews")
 
     def __str__(self):
-        return str(self.rating) + " | " + self.watchlist.title
+        return str(self.rating) + " | " + self.watchlist.title + " | " + str(self.review_user)

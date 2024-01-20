@@ -22,7 +22,7 @@ def registration_view(request):
 
                 if serializer.is_valid():
                     account = serializer.save()  #account data is stored in a variable called account
-                    data['reponse'] = "Registration Successfull"
+                    data['response'] = "Registration Successfull"
                     data['username'] = account.username
                     data['email'] = account.email
                     token = Token.objects.get(user=account).key

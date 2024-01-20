@@ -20,6 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('imdbapp/',include("imdbapp.urls")),
-    # path('api-auth/',include('rest_framework.urls')),
+    # path('api-auth/',include('rest_framework.urls')), #for temporary login page - used for testing purpose 
     path('account/',include('user_app.urls')),
 ]
